@@ -1,21 +1,7 @@
-/**
-Useful links
-https://wiki.wemos.cc/products:d1:d1_mini
-https://cdn-images-1.medium.com/max/1400/1*YKc8KpAfMrlhrOLmNjdRwQ.png (D1 full pinout)
-https://github.com/Jorgen-VikingGod/ESP8266-MFRC522
-https://github.com/miguelbalboa/rfid
-d1 mini rc52 wiring
-https://discourse-cdn-sjc1.com/business5/uploads/mydevices/original/2X/e/ecedba79dc05f2c0b02b7fba8b3da2681590a11a.jpg
-RST  - D3
-MISO - D6
-MOSI - D7
-SCK  - D5
-SDA  - D8
-*/
-
 #include "ESP8266WiFi.h"
 #include <SPI.h>
 #include <MFRC522.h>
+#define LOCK 2   // LOW : ON, HIGH : OFF
 
 constexpr uint8_t RST_PIN =  0;          // Configurable, see typical pin layout above 18
 constexpr uint8_t SS_PIN =  15;         // Configurable, see typical pin layout above  16
@@ -23,6 +9,8 @@ constexpr uint8_t SS_PIN =  15;         // Configurable, see typical pin layout 
 MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 
 void setup() {
+  pinMode(LOCK, OUTPUT);
+  digitalWrite(LOCK, LOW);
   Serial.begin(115200);   // Initialize serial communications with the PC
   delay(1000);
   Serial.println("Setup");
@@ -63,8 +51,16 @@ void loop() {
 
 // Helper routine to dump a byte array as hex values to Serial
 void dump_byte_array(byte *buffer, byte bufferSize) {
+  uint64_t code = 0;
   for (byte i = 0; i < bufferSize; i++) {
-    Serial.print(buffer[i] < 0x10 ? " 0" : " ");
-    Serial.print(buffer[i], HEX);
+    //Serial.print(buffer[i], HEX);
+    code |= ((uint64_t) buffer[i] << ((bufferSize - i - 1) * 8));
   }
-} 
+  Serial.println(code);
+
+  if(code == 3999106697 || 3493325474 || 542010787){
+    digitalWrite(LOCK, HIGH);
+    delay(5000);
+    digitalWrite(LOCK, LOW);
+  }
+}

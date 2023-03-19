@@ -1,8 +1,14 @@
 #define IO_USERNAME  "MyeongEi"
-#define IO_KEY       "aio_mlYR03kpbVTuyRuGlbG4gIE2dZlb"
+#define IO_KEY       "aio_dXxk33gWrC2oxaRohugsi4YxHSzu"
 
-#define WIFI_SSID "Kang_1101"
-#define WIFI_PASS "$*^audtjr1021"
+//#define WIFI_SSID "Kang_1101"
+//#define WIFI_PASS "$*^audtjr1021"
+
+#define WIFI_SSID "SK_WiFiGIGAE52A_2.4G"
+#define WIFI_PASS "BGWB7@6319"
+
+//#define WIFI_SSID "KMS"
+//#define WIFI_PASS "4*^Audtjr1021"
 
 #include "AdafruitIO_WiFi.h"
 
