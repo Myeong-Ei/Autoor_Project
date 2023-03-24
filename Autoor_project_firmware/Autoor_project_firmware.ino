@@ -82,8 +82,7 @@ void loop() {
   //------------------------------------------------------------
   
   int button_state = analogRead(BUTTON);
-  if(button_state > 1000 && read_doorsensor() == 1
-  ){
+  if(button_state > 1000 && read_doorsensor() == 1){
     while(true){
       delay(2000);
       int Time = 0;
