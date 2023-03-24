@@ -1,5 +1,6 @@
 #include <Adafruit_Fingerprint.h>
 #define LOCK 2
+#define BUTTON A0
 
 SoftwareSerial mySerial(4, 5);
 
@@ -7,6 +8,7 @@ Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
 void setup(){
   pinMode(LOCK, OUTPUT);
+  pinMode(BUTTON, INPUT);
   digitalWrite(LOCK, LOW);
   Serial.begin(115200);
   while (!Serial);
@@ -28,8 +30,18 @@ void setup(){
 }
 
 void loop(){
-  getFingerprintIDez();
-  delay(50);
+  int button_state = analogRead(BUTTON);
+  if(button_state > 1000){
+    while(true){
+      delay(2000);
+      int Time = 0;
+      int state = getFingerprintID();
+      if(state > 0 || Time == 3) break;
+      else Time++;
+      
+    }
+  }
+  
 }
 
 uint8_t getFingerprintID() {
@@ -96,28 +108,32 @@ uint8_t getFingerprintID() {
   Serial.print("Found ID #"); Serial.print(finger.fingerID); 
   Serial.print(" with confidence of "); Serial.println(finger.confidence); 
 
+  digitalWrite(LOCK, HIGH);
+  delay(5000);
+  digitalWrite(LOCK, LOW);
+  
   return finger.fingerID;
 }
 
 // returns -1 if failed, otherwise returns ID #
-int getFingerprintIDez() {
-  uint8_t p = finger.getImage();
-  if (p != FINGERPRINT_OK)  return -1;
-
-  p = finger.image2Tz();
-  if (p != FINGERPRINT_OK)  return -1;
-
-  p = finger.fingerFastSearch();
-  if (p != FINGERPRINT_OK)  return -1;
-  
-  // found a match!
-  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
-  Serial.print(" with confidence of "); Serial.println(finger.confidence);
-  
-  // when match fingerprint, release LOCK.
-
-  digitalWrite(LOCK, HIGH);
-  delay(5000);
-  digitalWrite(LOCK, LOW);
-  return finger.fingerID; 
-}
+//int getFingerprintIDez() {
+//  uint8_t p = finger.getImage();
+//  if (p != FINGERPRINT_OK)  return -1;
+//
+//  p = finger.image2Tz();
+//  if (p != FINGERPRINT_OK)  return -1;
+//
+//  p = finger.fingerFastSearch();
+//  if (p != FINGERPRINT_OK)  return -1;
+//  
+//  // found a match!
+//  Serial.print("Found ID #"); Serial.print(finger.fingerID); 
+//  Serial.print(" with confidence of "); Serial.println(finger.confidence);
+//  
+//  // when match fingerprint, release LOCK.
+//
+//  digitalWrite(LOCK, HIGH);
+//  delay(5000);
+//  digitalWrite(LOCK, LOW);
+//  return finger.fingerID; 
+//}

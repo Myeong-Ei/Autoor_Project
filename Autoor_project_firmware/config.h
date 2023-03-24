@@ -1,5 +1,5 @@
 #define IO_USERNAME  "MyeongEi"
-#define IO_KEY       "aio_dXxk33gWrC2oxaRohugsi4YxHSzu"
+#define IO_KEY       "aio_bMar66nGbbWpXBg4WATmMDAhSDtJ"
 
 //#define WIFI_SSID "Kang_1101"
 //#define WIFI_PASS "$*^audtjr1021"
